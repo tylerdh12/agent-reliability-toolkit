@@ -1,0 +1,21 @@
+# Agent Reliability Toolkit Dependencies
+
+# Testing Framework
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-json-report>=1.5.0
+
+# HTTP Client
+httpx>=0.24.0
+
+# CLI and Output
+rich>=13.0.0
+click>=8.1.0
+
+# Example Agent Dependencies
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.0.0
+
+# Utilities
+python-dateutil>=2.8.0
