@@ -1,0 +1,6 @@
+theme: minima
+title: Agent Reliability Toolkit
+description: Open-source testing framework for AI agents. Test for the 7 failure modes before production deployment.
+url: "https://tylerdh12.github.io"
+baseurl: "/agent-reliability-toolkit"
+show_excerpts: true
