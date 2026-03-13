@@ -19,3 +19,11 @@ pydantic>=2.0.0
 
 # Utilities
 python-dateutil>=2.8.0
+
+# Agent Wrapper
+flask>=3.0.0
+requests>=2.31.0
+
+# Optional: install these only when using the corresponding --type
+# openai>=1.30.0       (for --type openai)
+# anthropic>=0.28.0    (for --type claude)
