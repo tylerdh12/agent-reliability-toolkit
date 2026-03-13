@@ -132,7 +132,7 @@ We build and audit AI agent systems for small businesses. This toolkit is extrac
 - [Autonomous Agent Blueprint](https://gumroad.com/l/agent-blueprint/l/agent-blueprint)
 - [Harper Labs Blog](https://tylerdh12.github.io/harper-labs-blog/)
 
-**Contact:** kiko@tylerharper.dev
+**Contact:** kiko@tylerdh12.github.io
 
 ---
 

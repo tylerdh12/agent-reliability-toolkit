@@ -1,15 +1,18 @@
-.PHONY: install test audit score example clean help
+.PHONY: install test audit score adversarial report full-audit example clean help
 
 # Default target
 help:
 	@echo "Agent Reliability Toolkit - Available Commands"
 	@echo ""
-	@echo "  make install    - Install dependencies"
-	@echo "  make test       - Run all tests (requires AGENT_ENDPOINT)"
-	@echo "  make audit      - Run full audit suite"
-	@echo "  make score      - Generate score report from latest results"
-	@echo "  make example    - Run the example echo agent"
-	@echo "  make clean      - Clean up test results and cache"
+	@echo "  make install       - Install dependencies"
+	@echo "  make test          - Run all tests (requires AGENT_ENDPOINT)"
+	@echo "  make audit         - Run full audit suite"
+	@echo "  make adversarial   - Run adversarial / red-team testing"
+	@echo "  make report        - Generate Markdown + HTML report from latest results"
+	@echo "  make full-audit    - audit + adversarial + report in one shot"
+	@echo "  make score         - Generate score report from latest results"
+	@echo "  make example       - Run the example echo agent"
+	@echo "  make clean         - Clean up test results and cache"
 	@echo ""
 	@echo "Environment Variables:"
 	@echo "  AGENT_ENDPOINT - Agent API endpoint (default: http://localhost:8000)"
@@ -60,6 +63,71 @@ score:
 	else \
 		python scripts/score-agent.py $$RESULTS_FILE; \
 	fi
+
+# Run adversarial / red-team testing
+adversarial:
+	@echo "Running adversarial tests..."
+	@if [ -z "$$AGENT_ENDPOINT" ]; then \
+		echo "Error: AGENT_ENDPOINT not set"; \
+		echo "Usage: make adversarial AGENT_ENDPOINT=http://localhost:8000"; \
+		exit 1; \
+	fi
+	@AGENT=$${AGENT_NAME:-unnamed-agent}; \
+	mkdir -p results; \
+	python scripts/adversarial-tester.py \
+		--agent "$$AGENT" \
+		--endpoint $$AGENT_ENDPOINT \
+		--output results/adversarial-results.json
+
+# Generate Markdown + HTML report from latest JSON results
+report:
+	@echo "Generating audit report..."
+	@mkdir -p reports
+	@if [ -n "$$RESULTS_FILE" ]; then \
+		INPUT=$$RESULTS_FILE; \
+	else \
+		INPUT=$$(ls -t results/*.json 2>/dev/null | head -1); \
+		if [ -z "$$INPUT" ]; then \
+			echo "Error: No results files found in results/"; \
+			echo "Run 'make audit' or 'make adversarial' first, or set RESULTS_FILE=<path>"; \
+			exit 1; \
+		fi; \
+	fi; \
+	AGENT=$${AGENT_NAME:-unnamed-agent}; \
+	python scripts/audit-report-generator.py \
+		--input "$$INPUT" \
+		--agent "$$AGENT" \
+		--output-dir reports/ \
+		--format both
+
+# Run full audit + adversarial + report
+full-audit:
+	@echo "Running full audit pipeline..."
+	@if [ -z "$$AGENT_ENDPOINT" ]; then \
+		echo "Error: AGENT_ENDPOINT not set"; \
+		echo "Usage: make full-audit AGENT_ENDPOINT=http://localhost:8000 AGENT_NAME=my-agent"; \
+		exit 1; \
+	fi
+	@AGENT=$${AGENT_NAME:-unnamed-agent}; \
+	mkdir -p results reports; \
+	echo "Step 1/3: Running standard audit..."; \
+	./scripts/run-audit.sh --endpoint $$AGENT_ENDPOINT || true; \
+	echo "Step 2/3: Running adversarial tests..."; \
+	python scripts/adversarial-tester.py \
+		--agent "$$AGENT" \
+		--endpoint $$AGENT_ENDPOINT \
+		--output results/adversarial-results.json || true; \
+	echo "Step 3/3: Generating report..."; \
+	LATEST=$$(ls -t results/*.json 2>/dev/null | head -1); \
+	if [ -n "$$LATEST" ]; then \
+		python scripts/audit-report-generator.py \
+			--input "$$LATEST" \
+			--agent "$$AGENT" \
+			--output-dir reports/ \
+			--format both; \
+	fi; \
+	echo ""; \
+	echo "Full audit complete. Reports in reports/"
 
 # Run example echo agent
 example:
