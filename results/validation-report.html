@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Reliability Report — unknown-agent</title>
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0 1rem;
+  border-bottom: 1px solid #2d3748;
+  margin-bottom: 2rem;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #f6ad55;
+  letter-spacing: -0.5px;
+}
+.logo span { color: #63b3ed; }
+h1 { font-size: 1.6rem; font-weight: 700; margin: 0 0 0.25rem; }
+h2 { font-size: 1.2rem; font-weight: 600; color: #90cdf4; margin: 2rem 0 0.75rem; border-bottom: 1px solid #2d3748; padding-bottom: 0.4rem; }
+h3 { font-size: 1rem; font-weight: 600; color: #fbd38d; margin: 1rem 0 0.4rem; }
+.meta { color: #718096; font-size: 0.85rem; margin-bottom: 1.5rem; }
+.score-card {
+  background: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.score-big { font-size: 3.5rem; font-weight: 900; line-height: 1; }
+.grade-big { font-size: 2rem; font-weight: 700; margin-top: 0.25rem; }
+.grade-label { font-size: 1rem; color: #a0aec0; margin-top: 0.5rem; }
+.good  { color: #68d391; }
+.warn  { color: #fbd38d; }
+.bad   { color: #fc8181; }
+.na    { color: #718096; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+th {
+  background: #1a202c;
+  color: #90cdf4;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+  border-bottom: 1px solid #2d3748;
+}
+td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid #1a202c;
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #161b27; }
+.score-good { color: #68d391; font-weight: 700; }
+.score-warn { color: #fbd38d; font-weight: 700; }
+.score-bad  { color: #fc8181; font-weight: 700; }
+.score-na   { color: #718096; }
+.failure-list { list-style: none; padding: 0; }
+.failure-list li {
+  background: #1a202c;
+  border-left: 3px solid #fc8181;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.4rem;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.88rem;
+}
+.failure-list li .suite { color: #90cdf4; font-weight: 600; }
+.rec-block {
+  background: #1a202c;
+  border: 1px solid #2d3748;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.rec-block ul { margin: 0.4rem 0 0; padding-left: 1.2rem; font-size: 0.9rem; color: #cbd5e0; }
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #2d3748;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #4a5568;
+}
+footer a { color: #63b3ed; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <div class="logo">Harper<span>Labs</span></div>
+      <div style="color:#718096;font-size:.8rem">Agent Reliability Toolkit</div>
+    </div>
+  </header>
+
+  <h1>Agent Reliability Audit Report</h1>
+  <div class="meta">
+    Agent: <strong>unknown-agent</strong><br>
+    Generated: 2026-03-13 09:13:16
+  </div>
+
+  <div class="score-card">
+    <div class="score-big warn">61.8/100</div>
+    <div class="grade-big warn">D</div>
+    <div class="grade-label">High Risk</div>
+  </div>
+
+  <h2>Failure Mode Scores</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Failure Mode</th>
+        <th>Description</th>
+        <th>Score</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Hallucination Failures</strong></td><td style='color:#718096;font-size:.85em'>Agent invents data or actions that don't exist</td><td class='score-bad'>53.8/100</td><td><span class="score-bad">❌ Critical</span></td></tr><tr><td><strong>Edge Case Failures</strong></td><td style='color:#718096;font-size:.85em'>Breaks on nulls, special characters, boundaries</td><td class='score-na'>N/A</td><td><span class="score-na">—</span></td></tr><tr><td><strong>Security Failures</strong></td><td style='color:#718096;font-size:.85em'>Vulnerable to prompt injection, data leakage</td><td class='score-warn'>75.0/100</td><td><span class="score-warn">⚠️ Concerning</span></td></tr><tr><td><strong>Context Management Failures</strong></td><td style='color:#718096;font-size:.85em'>Loses state in long conversations</td><td class='score-bad'>37.5/100</td><td><span class="score-bad">❌ Critical</span></td></tr><tr><td><strong>Integration / Tooling Failures</strong></td><td style='color:#718096;font-size:.85em'>Tool errors, timeouts, malformed responses</td><td class='score-warn'>79.2/100</td><td><span class="score-warn">⚠️ Concerning</span></td></tr><tr><td><strong>Data Integration Failures</strong></td><td style='color:#718096;font-size:.85em'>Schema changes, API downtime</td><td class='score-na'>N/A</td><td><span class="score-na">—</span></td></tr><tr><td><strong>Governance Failures</strong></td><td style='color:#718096;font-size:.85em'>Acts without approval, no audit trail</td><td class='score-na'>N/A</td><td><span class="score-na">—</span></td></tr>
+    </tbody>
+  </table>
+
+  
+
+  <h2>Recommendations</h2>
+  <div class='rec-block'><h3>Hallucination Failures</h3><em style='color:#718096;font-size:.85em'>Agent invents data or actions that don't exist</em><ul><li>Add 'not found' guard clauses before every entity lookup.</li><li>Return structured error objects (404-style) for missing IDs.</li><li>Require the agent to cite sources for all factual claims.</li></ul></div><div class='rec-block'><h3>Context Management Failures</h3><em style='color:#718096;font-size:.85em'>Loses state in long conversations</em><ul><li>Implement session state checkpointing for conversations > 10 turns.</li><li>Test recall of facts stated at turn 1 after 20+ turns of new content.</li><li>Summarize and compress long contexts before sending to the model.</li></ul></div>
+
+  <footer>
+    Generated by
+    <a href="https://tylerdh12.github.io/agent-reliability-toolkit">
+      Harper Labs Agent Reliability Toolkit
+    </a>
+    &mdash; MIT License
+  </footer>
+</div>
+</body>
+</html>

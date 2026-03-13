@@ -27,10 +27,13 @@ htmlcov/
 .tox/
 .hypothesis/
 
-# Results
+# Results — excluded by default; client audit results should not be committed
 results/
 *.json
 !examples/**/*.json
+# Exception: include the validation run artifacts as a pipeline smoke-test reference
+!results/validation-audit.json
+!results/validation-report.html
 
 # Environment
 .env

@@ -568,16 +568,30 @@ def main():
     parser = argparse.ArgumentParser(
         description="Harper Labs Audit Report Generator — Markdown + HTML from JSON results"
     )
+    # Accept input as positional arg OR --input flag for backward compat
+    parser.add_argument(
+        "input_positional",
+        nargs="?",
+        default=None,
+        help="Path to JSON audit results file (positional)",
+    )
     parser.add_argument(
         "--input",
-        required=True,
-        help="Path to JSON audit results file",
+        default=None,
+        help="Path to JSON audit results file (alternative to positional)",
     )
     parser.add_argument(
         "--agent",
         default=None,
         help="Agent name (inferred from JSON if not set)",
     )
+    # --output: write a single file to an explicit path (format inferred from extension)
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Write a single output file to this path (format inferred from .html / .md extension)",
+    )
+    # Legacy flags still work
     parser.add_argument(
         "--output-dir",
         default=".",
@@ -597,36 +611,60 @@ def main():
 
     args = parser.parse_args()
 
+    # Resolve input path (positional takes priority over --input)
+    input_path = args.input_positional or args.input
+    if not input_path:
+        parser.error("Provide a JSON input file as a positional argument or via --input")
+
     # Load input
     try:
-        with open(args.input, "r") as f:
+        with open(input_path, "r") as f:
             data = json.load(f)
     except FileNotFoundError:
-        print(f"Error: Input file not found: {args.input}", file=sys.stderr)
+        print(f"Error: Input file not found: {input_path}", file=sys.stderr)
         sys.exit(1)
     except json.JSONDecodeError as e:
-        print(f"Error: Invalid JSON in {args.input}: {e}", file=sys.stderr)
+        print(f"Error: Invalid JSON in {input_path}: {e}", file=sys.stderr)
         sys.exit(1)
 
     agent_name = args.agent or data.get("agent") or "unknown-agent"
     ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-    prefix = args.output_prefix or f"{agent_name}-{ts}"
-
-    out_dir = Path(args.output_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
 
     written = []
-    if args.format in ("markdown", "both"):
-        md = generate_markdown(data, agent_name)
-        md_path = out_dir / f"{prefix}.md"
-        md_path.write_text(md, encoding="utf-8")
-        written.append(str(md_path))
 
-    if args.format in ("html", "both"):
-        html = generate_html(data, agent_name)
-        html_path = out_dir / f"{prefix}.html"
-        html_path.write_text(html, encoding="utf-8")
-        written.append(str(html_path))
+    # --output: single explicit output path
+    if args.output:
+        out = Path(args.output)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        ext = out.suffix.lower()
+        if ext == ".html":
+            out.write_text(generate_html(data, agent_name), encoding="utf-8")
+        elif ext in (".md", ".markdown"):
+            out.write_text(generate_markdown(data, agent_name), encoding="utf-8")
+        else:
+            # Default to format flag
+            if args.format in ("html", "both"):
+                out.write_text(generate_html(data, agent_name), encoding="utf-8")
+            else:
+                out.write_text(generate_markdown(data, agent_name), encoding="utf-8")
+        written.append(str(out))
+    else:
+        # Legacy output-dir / output-prefix behaviour
+        prefix = args.output_prefix or f"{agent_name}-{ts}"
+        out_dir = Path(args.output_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        if args.format in ("markdown", "both"):
+            md = generate_markdown(data, agent_name)
+            md_path = out_dir / f"{prefix}.md"
+            md_path.write_text(md, encoding="utf-8")
+            written.append(str(md_path))
+
+        if args.format in ("html", "both"):
+            html = generate_html(data, agent_name)
+            html_path = out_dir / f"{prefix}.html"
+            html_path.write_text(html, encoding="utf-8")
+            written.append(str(html_path))
 
     for path in written:
         print(f"✓ Written: {path}")

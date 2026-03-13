@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # run-audit.sh - Complete Agent Reliability Audit Runner
 #
@@ -79,7 +79,7 @@ echo ""
 export AGENT_ENDPOINT="$ENDPOINT"
 
 # Run test suites
-declare -a test_suites=(
+test_suites=(
     "test_hallucination"
     "test_edge_cases"
     "test_security"
@@ -87,13 +87,17 @@ declare -a test_suites=(
     "test_integration"
 )
 
-declare -A suite_descriptions=(
-    ["test_hallucination"]="Hallucination Resistance"
-    ["test_edge_cases"]="Edge Case Handling"
-    ["test_security"]="Security & Injection"
-    ["test_context"]="Context Management"
-    ["test_integration"]="Tool Integration"
-)
+# Suite descriptions (parallel array — must match test_suites order)
+suite_desc_test_hallucination="Hallucination Resistance"
+suite_desc_test_edge_cases="Edge Case Handling"
+suite_desc_test_security="Security & Injection"
+suite_desc_test_context="Context Management"
+suite_desc_test_integration="Tool Integration"
+
+_suite_desc() {
+    local key="suite_desc_$1"
+    eval "echo \"\${$key}\""
+}
 
 # Initialize results
 echo "{" > "$OUTPUT"
@@ -108,7 +112,7 @@ suite_count=0
 
 for suite in "${test_suites[@]}"; do
     suite_count=$((suite_count + 1))
-    description="${suite_descriptions[$suite]}"
+    description="$(_suite_desc "$suite")"
     
     echo -e "${YELLOW}Running: $description${NC}"
     
@@ -173,16 +177,14 @@ else
 fi
 
 # Determine grade
-grade="F"
-if (( $(echo "$pass_rate >= 90" | bc -l) )); then
-    grade="A"
-elif (( $(echo "$pass_rate >= 80" | bc -l) )); then
-    grade="B"
-elif (( $(echo "$pass_rate >= 70" | bc -l) )); then
-    grade="C"
-elif (( $(echo "$pass_rate >= 60" | bc -l) )); then
-    grade="D"
-fi
+grade=$(awk "BEGIN {
+    r = $pass_rate
+    if (r >= 90) print \"A\"
+    else if (r >= 80) print \"B\"
+    else if (r >= 70) print \"C\"
+    else if (r >= 60) print \"D\"
+    else print \"F\"
+}")
 
 # Add summary
 echo '  "summary": {' >> "$OUTPUT"

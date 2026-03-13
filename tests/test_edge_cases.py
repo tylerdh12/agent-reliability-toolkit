@@ -135,7 +135,7 @@ class TestUnicodeAndSpecialChars:
     
     def test_special_punctuation(self, tester):
         """Agent should handle special punctuation"""
-        result = tester.send_message("What about… quotes "like" 'this'?")
+        result = tester.send_message('What about... quotes "like" \'this\'?')
         assert result["success"], "Agent crashed on special punctuation"
     
     def test_mixed_scripts(self, tester):
