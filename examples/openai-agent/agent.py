@@ -142,7 +142,7 @@ def main():
     print(f"\n  Model   : {MODEL}")
     print(f"  Port    : {port}")
     print(f"\n  Audit:  export AGENT_ENDPOINT=http://localhost:{port}")
-    print("           bash scripts/run-audit.sh --endpoint http://localhost:{port}")
+    print(f"           bash scripts/run-audit.sh --endpoint http://localhost:{port}")
     print("\n" + "=" * 55 + "\n")
     uvicorn.run(app, host="0.0.0.0", port=port)
 

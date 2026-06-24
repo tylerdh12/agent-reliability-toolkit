@@ -99,6 +99,22 @@ _suite_desc() {
     eval "echo \"\${$key}\""
 }
 
+_json_summary_value() {
+    local file="$1"
+    local field="$2"
+    python3 - "$file" "$field" <<'PY'
+import json
+import sys
+
+try:
+    with open(sys.argv[1], "r", encoding="utf-8") as f:
+        data = json.load(f)
+    print(data.get("summary", {}).get(sys.argv[2], 0) or 0)
+except Exception:
+    print(0)
+PY
+}
+
 # Initialize results
 echo "{" > "$OUTPUT"
 echo '  "audit_timestamp": "'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'",' >> "$OUTPUT"
@@ -135,10 +151,10 @@ for suite in "${test_suites[@]}"; do
     
     # Parse pytest JSON output
     if [ -f "$temp_output" ]; then
-        # Extract test counts from pytest JSON
-        tests=$(jq -r '.summary.total // 0' "$temp_output" 2>/dev/null || echo "0")
-        passed=$(jq -r '.summary.passed // 0' "$temp_output" 2>/dev/null || echo "0")
-        failed=$(jq -r '.summary.failed // 0' "$temp_output" 2>/dev/null || echo "0")
+        # Extract test counts from pytest JSON using Python stdlib.
+        tests=$(_json_summary_value "$temp_output" total)
+        passed=$(_json_summary_value "$temp_output" passed)
+        failed=$(_json_summary_value "$temp_output" failed)
         
         total_tests=$((total_tests + tests))
         total_passed=$((total_passed + passed))

@@ -9,22 +9,22 @@ Companion repo to the [AI Agent Reliability Audit Framework](https://tylerdh12.g
 ## What's Included
 
 ### Testing Scripts
-- `test-hallucination.py` — Test agent responses to invalid/missing data
-- `test-edge-cases.sh` — Boundary values, special characters, nulls
-- `test-security.py` — Prompt injection, data leakage attempts
-- `test-context.py` — Long conversations, state persistence checks
-- `test-integration.py` — Tool failures, API errors, rate limits
-- `adversarial-tester.py` — Automated red-team testing
+- `scripts/test-hallucination.py` — Standalone hallucination-resistance checks
+- `scripts/adversarial-tester.py` — Automated red-team testing
+- `tests/test_edge_cases.py` — Boundary values, special characters, nulls
+- `tests/test_security.py` — Prompt injection, data leakage attempts
+- `tests/test_context.py` — Long conversations, state persistence checks
+- `tests/test_integration.py` — Tool failures, API errors, rate limits
 
 ### Audit Tools
 - `run-audit.sh` — Execute full audit suite
-- `audit-report-generator.py` — Score agent, generate PDF report
-- `failure-classifier.py` — Categorize failures by mode
+- `score-agent.py` — Score agent reliability from JSON audit results
+- `audit-report-generator.py` — Generate Markdown/HTML reports
+- `agent-wrapper.py` — Wrap existing agents behind the toolkit HTTP schema
 
 ### Example Agents
-- `examples/email-agent/` — Audited email triage agent (passing example)
-- `examples/calendar-agent/` — Calendar management agent
-- `examples/data-pipeline/` — Data integration agent
+- `examples/simple-echo-agent/` — Local FastAPI demo agent with intentional failures
+- `examples/openai-agent/` — OpenAI-backed FastAPI reference agent
 
 ---
 
@@ -38,11 +38,14 @@ cd agent-reliability-toolkit
 # Install dependencies
 pip install -r requirements.txt
 
-# Run full audit on your agent
-./scripts/run-audit.sh --agent your-agent-name --output report.pdf
+# Start the local example agent in another terminal
+python examples/simple-echo-agent/agent.py
+
+# Run full audit on an agent endpoint
+./scripts/run-audit.sh --endpoint http://localhost:8000 --output results/audit.json
 
 # Test specific failure mode
-python scripts/test-hallucination.py --agent your-agent-name
+python scripts/test-hallucination.py --agent your-agent-name --endpoint http://localhost:8000
 ```
 
 ---
@@ -75,6 +78,7 @@ python scripts/test-hallucination.py \
 ```bash
 python scripts/adversarial-tester.py \
   --agent your-agent-name \
+  --endpoint http://localhost:8000 \
   --iterations 100 \
   --output adversarial-report.json
 ```
@@ -82,8 +86,9 @@ python scripts/adversarial-tester.py \
 ### Generate Audit Report
 ```bash
 python scripts/audit-report-generator.py \
-  --test-results ./results/ \
-  --output audit-report.pdf
+  --input results/audit.json \
+  --agent your-agent-name \
+  --output reports/audit-report.html
 ```
 
 ---
@@ -97,14 +102,13 @@ We welcome contributions! Areas we need help:
 - Example agents in different domains
 - Visualization tools for audit results
 
-See `CONTRIBUTING.md` for guidelines.
-
 ---
 
 ## Roadmap
 
-- [x] Test scripts for 7 failure modes
+- [x] Test suites for 5 wired failure modes
 - [x] Audit report generator
+- [ ] Dedicated data integration and governance suites
 - [ ] Web UI for running audits
 - [ ] CI/CD integration (GitHub Actions, GitLab CI)
 - [ ] LangSmith/LangChain integration
@@ -136,4 +140,4 @@ We build and audit AI agent systems for small businesses. This toolkit is extrac
 
 ---
 
-*Last updated: March 7, 2026*
+*Last updated: June 23, 2026*
