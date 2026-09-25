@@ -2,7 +2,7 @@
 
 **Open-source testing framework for AI agents. Test for the 7 failure modes before production deployment.**
 
-Companion repo to the [AI Agent Reliability Audit Framework](https://tylerdh12.github.io/harper-labs-blog/).
+Companion repo to the [AI Agent Reliability Audit Framework](https://harperlabs.ai/blog).
 
 ---
 
@@ -60,7 +60,7 @@ python scripts/test-hallucination.py --agent your-agent-name --endpoint http://l
 6. **Integration/Tooling Failures** — Tool errors, wrong parameters
 7. **Governance Failures** — Acts without approval, no audit trail
 
-Read the full framework: [AI Agent Reliability Audit Framework](https://tylerdh12.github.io/harper-labs-blog/)
+Read the full framework: [AI Agent Reliability Audit Framework](https://harperlabs.ai/blog)
 
 ---
 
@@ -133,10 +133,10 @@ We build and audit AI agent systems for small businesses. This toolkit is extrac
 - Production deployment consulting
 
 **Resources:**
-- [Autonomous Agent Blueprint](https://gumroad.com/l/agent-blueprint/l/agent-blueprint)
-- [Harper Labs Blog](https://tylerdh12.github.io/harper-labs-blog/)
+- [Autonomous Agent Blueprint](https://gumroad.com/l/agent-blueprint)
+- [Harper Labs Blog](https://harperlabs.ai/blog)
 
-**Contact:** kiko@tylerdh12.github.io
+**Contact:** [kiko.harper@agentmail.to](mailto:kiko.harper@agentmail.to) — or use the contact form at [harperlabs.ai](https://harperlabs.ai/#contact)
 
 ---
 
