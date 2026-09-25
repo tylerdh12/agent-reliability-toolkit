@@ -66,10 +66,10 @@ These are good-faith estimates. Complex setups, slow APIs, or access issues may 
 
 ## Fee
 
-**$2,500 flat fee.**
+**$4,500 flat fee.**
 
-- **50% ($1,250) due upon signing** this Statement of Work.
-- **50% ($1,250) due upon delivery** of the audit report.
+- **50% ($2,250) due upon signing** this Statement of Work.
+- **50% ($2,250) due upon delivery** of the audit report.
 
 Payment instructions will be provided separately. Work does not begin until the initial payment is received.
 

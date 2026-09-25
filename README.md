@@ -128,7 +128,7 @@ MIT License. Free to use, modify, distribute.
 We build and audit AI agent systems for small businesses. This toolkit is extracted from our internal testing process.
 
 **Services:**
-- AI Agent Reliability Audits ($2,500/agent)
+- AI Agent Reliability Audits — [harperlabs.ai](https://harperlabs.ai)
 - Custom agent development
 - Production deployment consulting
 
