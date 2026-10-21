@@ -1,7 +1,7 @@
 # Agent Reliability Toolkit Dependencies
 
 # Testing Framework
-pytest>=7.4.0
+pytest>=9.1.1
 pytest-asyncio>=0.21.0
 pytest-json-report>=1.5.0
 
